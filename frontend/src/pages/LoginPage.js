@@ -1,67 +1,93 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { TextField, Button, Container, Typography, Box } from '@mui/material';
+import {
+  TextField, Button, Container, Typography, Box, CircularProgress,
+  Alert, InputAdornment, IconButton, Paper
+} from '@mui/material';
+import { LockOutlined, Visibility, VisibilityOff } from '@mui/icons-material';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const { onLogin } = useAuth();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const success = await onLogin(username, password);
-    if (!success) {
-      alert('Falha ao autenticar. Verifique o usuário e a senha.');
+    setError('');
+    setIsLoading(true);
+    try {
+      const success = await onLogin(username, password);
+      if (!success) {
+        setError('Usuário ou senha inválidos. Tente novamente.');
+      }
+    } catch (err) {
+      setError('Ocorreu um erro ao tentar conectar. Verifique o servidor.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
+    <Container component="main" maxWidth="xs" sx={{ mt: 8 }}>
+      <Paper 
+        elevation={2} 
+        sx={{ 
+          padding: 4, 
+          display: 'flex', 
+          flexDirection: 'column', 
           alignItems: 'center',
+          borderRadius: '10px',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)'
         }}
       >
+        <LockOutlined sx={{ m: 1, bgcolor: 'primary.main', p: 1, borderRadius: '50%', color: 'white' }} />
+        
         <Typography component="h1" variant="h5">
-          Santo BPO - Acesso
+          Acesso ao Sistema
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3, width: '100%' }}>
+          {error && <Alert severity="error" sx={{ width: '100%', mb: 2 }}>{error}</Alert>}
+
+          {}
           <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="Usuário"
-            name="username"
-            autoFocus
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            variant="standard"
+            margin="normal" required fullWidth id="username" label="Usuário" name="username"
+            autoFocus value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading}
           />
+
+          {}
           <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Senha"
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            variant="standard"
+            margin="normal" required fullWidth name="password" label="Senha"
+            type={showPassword ? 'text' : 'password'} id="password" value={password}
+            onChange={(e) => setPassword(e.target.value)} disabled={isLoading}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClickShowPassword} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Entrar
-          </Button>
+          <Box sx={{ position: 'relative', mt: 4, mb: 2 }}>
+            <Button type="submit" fullWidth variant="contained" disabled={isLoading}>
+              Entrar
+            </Button>
+            {isLoading && (
+              <CircularProgress size={24} sx={{ position: 'absolute', top: '50%', left: '50%', marginTop: '-12px', marginLeft: '-12px' }}/>
+            )}
+          </Box>
         </Box>
-      </Box>
+      </Paper>
     </Container>
   );
 }
