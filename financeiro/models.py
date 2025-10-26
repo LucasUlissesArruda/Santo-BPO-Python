@@ -2,7 +2,6 @@
 
 from django.db import models
 
-# Modelo para os clientes da Santo BPO
 class Cliente(models.Model):
     razao_social = models.CharField(max_length=255, verbose_name="Razão Social")
     cnpj = models.CharField(max_length=18, unique=True, verbose_name="CNPJ")
@@ -16,7 +15,6 @@ class Cliente(models.Model):
     def __str__(self):
         return self.razao_social
 
-# Modelo para os Lançamentos Financeiros (Fluxo de Caixa)
 class Lancamento(models.Model):
     TIPO_CHOICES = (
         ('PAGAR', 'Contas a Pagar'),
@@ -29,7 +27,6 @@ class Lancamento(models.Model):
         ('CANCELADO', 'Cancelado'),
     )
 
-    # Um lançamento pertence a um Cliente
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='lancamentos', verbose_name="Cliente")
     
     descricao = models.CharField(max_length=255, verbose_name="Descrição")

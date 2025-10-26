@@ -121,6 +121,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+from datetime import timedelta
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -131,4 +132,17 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
+}
+
+SIMPLE_JWT = {
+    # Define o tempo de vida do Token de Acesso
+    # (Default: 5 minutos)
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),  # Agora dura 1 HORA
+
+    # Define o tempo de vida do Token de Refresh
+    # (Default: 1 dia)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # Agora dura 7 DIAS
+    
+    # Opcional: Permite que o token de refresh seja "rotacionado"
+    # 'ROTATE_REFRESH_TOKENS': True,
 }
