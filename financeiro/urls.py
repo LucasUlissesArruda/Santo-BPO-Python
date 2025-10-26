@@ -2,12 +2,14 @@
 
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ClienteViewSet
+from .views import ClienteViewSet, LancamentoViewSet
+from .views import ClienteViewSet, LancamentoViewSet, DashboardAPIView
 
-# O router cuida de registrar as URLs para o ViewSet (CRUD)
 router = DefaultRouter()
 router.register(r'clientes', ClienteViewSet, basename='cliente')
+router.register(r'lancamentos', LancamentoViewSet, basename='lancamento')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('dashboard/', DashboardAPIView.as_view(), name='dashboard'),
 ]
