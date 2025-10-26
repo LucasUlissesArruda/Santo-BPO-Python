@@ -40,7 +40,7 @@ class Lancamento(models.Model):
     tipo = models.CharField(max_length=7, choices=TIPO_CHOICES, verbose_name="Tipo")
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDENTE', verbose_name="Status")
     
-    conciliadoo = models.BooleanField(default=False, verbose_name="Conciliado")
+    conciliado = models.BooleanField(default=False, verbose_name="Conciliado")
     
     criado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
