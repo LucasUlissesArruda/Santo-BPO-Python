@@ -1,1 +1,15 @@
+# Essenciais do Django e API
+django
+djangorestframework
+djangorestframework-simplejwt
 
+# Conector do Banco de Dados (PostgreSQL)
+psycopg2-binary
+
+# Para gerar Excel e PDF (adicionados pelos teus amigos)
+openpyxl 
+reportlab 
+
+# Outras dependências comuns (podem já estar ou não)
+python-dotenv
+django-cors-headers
