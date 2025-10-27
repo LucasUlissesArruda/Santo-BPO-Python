@@ -6,10 +6,12 @@ djangorestframework-simplejwt
 # Conector do Banco de Dados (PostgreSQL)
 psycopg2-binary
 
-# Para gerar Excel e PDF (adicionados pelos teus amigos)
+# Para gerar Excel e PDF (adicionados pela equipa)
 openpyxl 
 reportlab 
 
-# Outras dependências comuns (podem já estar ou não)
-python-dotenv
+# Para CORS (comunicação entre Front e Back)
 django-cors-headers
+
+# Outras dependências úteis
+python-dotenv
