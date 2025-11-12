@@ -1,14 +1,21 @@
 # financeiro/models.py
 
 from django.db import models
+from django.contrib.auth.models import User
 
 class Cliente(models.Model):
+    user = models.OneToOneField(
+        User, 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True, 
+        related_name="cliente_profile"
+    )
     razao_social = models.CharField(max_length=255, verbose_name="Razão Social")
     cnpj = models.CharField(max_length=18, unique=True, verbose_name="CNPJ")
     responsavel_nome = models.CharField(max_length=100, verbose_name="Nome do Responsável")
     responsavel_email = models.EmailField(max_length=100, verbose_name="Email do Responsável")
     responsavel_telefone = models.CharField(max_length=20, blank=True, null=True, verbose_name="Telefone")
-    
     criado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
 
@@ -20,11 +27,14 @@ class Lancamento(models.Model):
         ('PAGAR', 'Contas a Pagar'),
         ('RECEBER', 'Contas a Receber'),
     )
+    
+    # --- STATUS_CHOICES ATUALIZADO ---
     STATUS_CHOICES = (
         ('PENDENTE', 'Pendente'),
-        ('PAGO', 'Pago'),
         ('ATRASADO', 'Atrasado'),
         ('CANCELADO', 'Cancelado'),
+        ('PAGO', 'Pago (Contas a Pagar)'),
+        ('RECEBIDO', 'Recebido (Contas a Receber)'), # <-- ADICIONADO
     )
 
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='lancamentos', verbose_name="Cliente")
